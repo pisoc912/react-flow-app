@@ -30,86 +30,6 @@ interface CustomNode {
   position: XYPosition;
 }
 
-const initialNodes: CustomNode[] = [
-  {
-    id: "1",
-    name: "Product Feedback Analysis",
-    objective:
-      "The goal is to enhance product quality, user experience, and customer satisfaction. By understanding feedback trends, businesses can make informed decisions to refine and optimize their offerings.",
-    description:
-      "It involves systematically examining customer reviews, ratings, and comments regarding a product or service. It focuses on identifying patterns, preferences, and areas for improvement.",
-    type: "project",
-
-    children: [
-      {
-        id: "2",
-        name: "b",
-        parent: "1",
-        children: [
-          {
-            id: "3",
-            title: "Project Initiation",
-            objective:
-              "To formally define and authorize the project, ensure alignment with organizational goals, and obtain stakeholder buy-in.",
-            description:
-              "This phase involves defining the project at a high level, establishing its purpose, scope, and goals, and securing initial resources and stakeholder support.",
-            type: "phase",
-            children: [
-              {
-                id: "4",
-                parent: "3",
-                name: "d",
-              },
-            ],
-          },
-        ],
-      },
-      {
-        id: "5",
-        name: "b",
-        parent: "1",
-        children: [
-          {
-            id: "6",
-            name: "c",
-            parent: "5",
-            children: [
-              {
-                id: "7",
-                parent: "6",
-                name: "d",
-              },
-            ],
-          },
-        ],
-      },
-      {
-        id: "8",
-        name: "b",
-        parent: "1",
-        children: [
-          {
-            id: "9",
-            name: "c",
-            parent: "8",
-            children: [
-              {
-                id: "10",
-                parent: "9",
-                name: "d",
-              },
-            ],
-          },
-        ],
-      },
-      {
-        id: "11",
-        name: "f",
-        parent: "1",
-      },
-    ],
-  },
-];
 
 const initialEdges: Edge[] = [
   {
@@ -155,6 +75,7 @@ const ExpandAndCollapse: FC = (props) => {
         objective: item.objective,
         description: item.description,
         children: item.children,
+        type:item.type
       },
       position: { x: 0, y: 0 },
       sourcePosition: "right",
@@ -176,6 +97,7 @@ const ExpandAndCollapse: FC = (props) => {
           objective: child.objective,
           description: child.description,
           children: child.children,
+          type:child.type,
           parent: child.parent,
         },
         position: {
@@ -199,7 +121,6 @@ const ExpandAndCollapse: FC = (props) => {
       setNodes((nds) => nds.concat(newNodes));
       setEdges((eds) => eds.concat(newEdges));
     } else {
-      // 如果子节点已存在，则从视图中移除它们
       setNodes((nds) => nds.filter((n) => n.data.parent !== node.id));
       setEdges((eds) => eds.filter((e) => e.source !== node.id));
     }
@@ -216,6 +137,7 @@ const ExpandAndCollapse: FC = (props) => {
         onConnect={onConnect}
         onNodeClick={handleNodeClick}
         fitView
+        maxZoom={1.5}
         defaultViewport={{ x: 1, y: 1, zoom: 0.5 }}
         fitViewOptions={fitViewOptions}
       />
